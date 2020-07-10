@@ -1,8 +1,9 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
+	<view class="home">
+		<navbar></navbar>
+		<tab :list="tabList" @tab="tab" :tabIndex="tabIndex"></tab>
+		<view class="home-list">
+			<list :tab="tabList" :activeIndex="activeIndex" @change="change"></list>
 		</view>
 	</view>
 </template>
@@ -11,42 +12,49 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				tabList:[],
+				tabIndex:0,
+				activeIndex:0
 			}
 		},
 		onLoad() {
-
+			this.getLabel()
 		},
 		methods: {
-
+			change(current){
+				this.tabIndex = current
+				this.activeIndex = current
+			},
+			getLabel(){
+				//tab切换 调用云函数方法
+				this.$api.get_label({name:"get_label"}).then(res=>{
+					const {data} = res
+					data.unshift({
+						name:"全部"
+					})
+					this.tabList = data
+				})
+			},
+			tab({data,index}){
+				this.activeIndex = index
+			},
 		}
 	}
 </script>
 
-<style>
-	.content {
+<style lang="scss">
+	page{
+		height: 100%;
+		display: flex;
+	}
+	.home{
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+		flex: 1;
+		overflow: hidden;
+		.home-list{
+			flex: 1;
+			box-sizing: border-box;
+		}
 	}
 </style>

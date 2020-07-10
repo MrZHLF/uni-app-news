@@ -3,7 +3,9 @@
 		{
 			"path": "pages/tabbar/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "首页",
+				"navigationStyle":"custom",
+				"navigationBarTextStyle":"white"
 			}
 		}
 	    ,{
@@ -17,6 +19,10 @@
             "style" : {
 				"navigationBarTitleText":"个人中心"
 			}
+        }
+        ,{
+            "path" : "components/navbar/navbar",
+            "style" : {}
         }
     ],
 	"globalStyle": {
