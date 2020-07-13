@@ -3,13 +3,20 @@
 		<view class="navbar-fixed">
 			<!-- 状态栏 -->
 			<view :style="{height: statusBarHeight+'px'}"></view>
-			<view class="navbar-content" :style="{height: navBarHeight+'px',width:windowWidth+'px'}">
-				<view class="navbar-search">
+			<view class="navbar-content" :class="{search:isSearch}" :style="{height: navBarHeight+'px',width:windowWidth+'px'}" @click.stop="open">
+				<view v-if="isSearch" class="navbar-content_search-icons" @click="back">
+					<uni-icons type="back" size="22" color="#fff"></uni-icons>
+				</view>
+				<view v-if="!isSearch" class="navbar-search">
+					<!-- 非搜索页 -->
 					<view class="navbar-search_icon">
-						<!-- <text class="iconfont icon-search"></text> -->
 						<uni-icons type="search" size="16" color="#999"></uni-icons>
 					</view>
 					<view class="navbar-search_text">uni-app,vue</view>
+				</view>
+				<view v-else class="navbar-search">
+					<!-- 搜索页 -->
+					<input class="navbar-search_text" type="text" v-model="val" placeholder="请输入搜索的内容" @input="inputChange"/>
 				</view>
 			</view>
 		</view>
@@ -19,11 +26,27 @@
 
 <script>
 	export default {
+		props:{
+			isSearch:{
+				type:Boolean,
+				default:false
+			},
+			value:{
+				type:[String,Number],
+				default:''
+			}
+		},
+		watch:{
+			value(newValue) {
+				this.val = newValue
+			}	
+		},
 		data() {
 			return {
 				statusBarHeight:20,
 				navBarHeight:45,
-				windowWidth:375
+				windowWidth:375,
+				val:""
 			}
 		},
 		created() {
@@ -35,7 +58,7 @@
 			
 			// #ifndef H5 || APP-PLUS || MP-ALIPAY
 				const menuButtonInfo = uni.getMenuButtonBoundingClientRect()
-				// (胶囊底部高度-状态栏高度) + (胶囊顶部高度-状态栏高度) = 导航栏高度
+				// (胶囊底部高度-状态栏高度) + (胶囊顶部高度-状态栏高度) = s
 				 this.navBarHeight = (menuButtonInfo.bottom - info.statusBarHeight) + (menuButtonInfo.top - info.statusBarHeight)
 				 this.windowWidth = menuButtonInfo.left
 			// #endif
@@ -43,7 +66,21 @@
 			
 		},
 		methods: {
-			
+			open(){
+				if(this.isSearch) return
+				uni.navigateTo({
+					url:'/pages/home-search/home-search'
+				})
+			},
+			back(){
+				uni.switchTab({
+					url:'/pages/tabbar/index/index'
+				})
+			},
+			inputChange(e){
+				const {value} = e.detail
+				this.$emit('input',value)
+			}
 		}
 	}
 </script>
@@ -77,8 +114,19 @@
 						margin-right: 10px;
 					}
 					.navbar-search_text{
-						font-size: 12px;
+						width: 100%;
+						font-size: 14px;
 						color: #999;
+					}
+				}
+				&.search{
+					padding-left:0;
+					.navbar-content_search-icons{
+						margin-left: 10px;
+						margin-right: 10px;
+					}
+					.navbar-search{
+						border-radius: 5px;
 					}
 				}
 			}

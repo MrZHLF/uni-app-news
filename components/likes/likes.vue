@@ -39,7 +39,6 @@
 					user_id:'5f06eaf4e03eac00013be69c',
 					article_id:this.item._id
 				}).then((res) =>{
-					console.log(res)
 					uni.hideLoading()
 					uni.showToast({
 						title:this.like ? '收藏成功' : '取消收藏',
