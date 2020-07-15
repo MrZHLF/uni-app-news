@@ -7,7 +7,7 @@
 			<view class="comments-heander_info">
 				<view class="title" v-if="!comments.is_reply">{{comments.author.author_name}}</view>
 				<view class="title" v-else>{{comments.author.author_name}}<text class="reply-text">回复</text>{{comments.to}}</view>
-				<view >{{comments.create_time}}</view>
+				<view >{{comments.create_time | formatTiem}}</view>
 			</view>
 		</view>
 		<view class="comments-content">
@@ -24,6 +24,7 @@
 
 <script>
 	import commentsBox from "@/components/comments-box/comments-box.vue"
+	import {parseTime} from '@/utils/index.js'
 	export default {
 		name:"comments-box",
 		components:{
@@ -39,6 +40,11 @@
 			reply:{
 				type:Boolean,
 				default:false
+			}
+		},
+		filters:{
+			formatTiem(time) {
+				return parseTime(time)
 			}
 		},
 		data() {

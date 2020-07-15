@@ -13,6 +13,7 @@
 					<text>{{formData.thumbs_up_count}} 赞</text>
 				</view>
 			</view>
+			<button type="default" class="detail-header_button" @click="follow(formData.author.id)">{{formData.is_author_like ? '取消关注':'关注'}}</button>
 		</view>
 		<!-- 内容 -->
 		<view class="detail-content">
@@ -33,14 +34,14 @@
 				<uni-icons type="compose" size="16" color="#f07373"></uni-icons>
 			</view>
 			<view class="detail-bottom_icons">
-				<view class="detail-bottom_icons-box">
+				<view class="detail-bottom_icons-box" @click="open">
 					<uni-icons type="chat" size="22" color="#f07373"></uni-icons>
 				</view>
-				<view class="detail-bottom_icons-box">
-					<uni-icons type="heart" size="22" color="#f07373"></uni-icons>
+				<view class="detail-bottom_icons-box" @click="likeTap(formData._id)">
+					<uni-icons :type="formData.is_like ? 'heart-filled':'heart'" size="22" color="#f07373"></uni-icons>
 				</view>
-				<view class="detail-bottom_icons-box">
-					<uni-icons type="hand-thumbsup" size="22" color="#f07373"></uni-icons>
+				<view class="detail-bottom_icons-box" @click="thumbsup(formData._id)">
+					<uni-icons :type="formData.is_thumbs_up ? 'hand-thumbsup-filled' :'hand-thumbsup'" size="22" color="#f07373"></uni-icons>
 				</view>
 			</view>
 		</view>
@@ -80,6 +81,63 @@
 			this.getComments()
 		},
 		methods: {
+			open(){
+				uni.navigateTo({
+					url:"/pages/detail-comments/detail-comments?id="+this.formData._id
+				})
+			},
+			thumbsup(article_id){
+				// 点赞
+				this.setUpdateThumbsup(article_id)
+			},
+			setUpdateThumbsup(article_id){
+				uni.showLoading()
+				this.$api.update_thumbsup({article_id}).then(res =>{
+					console.log(res)
+					uni.hideLoading()
+					this.formData.is_thumbs_up= true
+					this.formData.thumbs_up_count++
+					uni.showToast({
+						title:res.msg,
+						icon:"none"
+					})
+				})
+			},
+			likeTap(article_id){
+				// 收藏
+				this.setUpdateLike(article_id)
+			},
+			setUpdateLike(article_id){
+				uni.showLoading()
+				this.$api.update_like({article_id}).then(res =>{
+					console.log(res)
+					uni.hideLoading()
+					this.formData.is_like = !this.formData.is_like
+					uni.$emit('update_article')
+					uni.showToast({
+						title:this.formData.is_like?'收藏成功':"取消收藏",
+						icon:"none"
+					})
+				})
+			},
+			follow(author_id){
+				// 关注和取消关注
+				this.setUpdateAuthor(author_id)
+			},
+			setUpdateAuthor(author_id){
+				uni.showLoading()
+				this.$api.update_author({
+					author_id
+				}).then(res=>{
+					console.log(res)
+					uni.hideLoading()
+					this.formData.is_author_like = !this.formData.is_author_like
+					uni.showToast({
+						title:this.formData.is_author_like?'关注作者成功':"取消关注",
+						icon:"none"
+					})
+				})
+			},
 			openComment(){
 				//打开评论窗口
 				this.$refs.popup.open()
@@ -194,6 +252,13 @@
 					margin-right: 10px;
 				}
 			}
+		}
+		.detail-header_button{
+			flex-shrink: 0;
+			height: 30px;
+			font-size: 12px;
+			color: #fff;
+			background-color: $mk-base-color;
 		}
 	}
 	.detail-content{
