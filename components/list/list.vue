@@ -33,10 +33,12 @@ export default {
 		};
 	},
 	created() {
-		uni.$on('update_article',() =>{
-			this.listCatchData = {}
-			this.load = {}
-			this.getList(this.activeIndex);
+		uni.$on('update_article',(e) =>{
+			if(e === 'follow') {
+				this.listCatchData = {}
+				this.load = {}
+				this.getList(this.activeIndex);
+			}
 		})
 	},
 	watch: {
