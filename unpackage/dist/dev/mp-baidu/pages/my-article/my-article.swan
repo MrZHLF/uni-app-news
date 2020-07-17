@@ -1,0 +1,1 @@
+<view><block s-if="{{list.length===0}}"><uni-load-more vue-id="511c36f1-1" status="loading" iconType="snow"></uni-load-more></block><block s-for="{{list}}" s-for-item="item" s-for-index="__i0__" s-key="id"><list-card vue-id="{{'511c36f1-2-'+__i0__}}" item="{{item}}"></list-card></block><block s-if="{{articleShow}}"><view class="no-data">没有数据</view></block></view>

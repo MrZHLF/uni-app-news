@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "comments-box": "/components/comments-box/comments-box",
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
+  }
+}

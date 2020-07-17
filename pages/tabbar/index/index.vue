@@ -9,6 +9,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -24,7 +25,14 @@
 				this.activeIndex =0
 				this.getLabel()
 			})
-			this.getLabel()
+		},
+		computed:{
+			...mapState(['userinfo'])
+		},
+		watch:{
+			userinfo(newValue) {
+				this.getLabel()
+			}
 		},
 		methods: {
 			change(current){
@@ -33,7 +41,7 @@
 			},
 			getLabel(){
 				//tab切换 调用云函数方法
-				this.$api.get_label({name:"get_label"}).then(res=>{
+				this.$api.get_label().then(res=>{
 					const {data} = res
 					data.unshift({
 						name:"全部"

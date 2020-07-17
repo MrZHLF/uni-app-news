@@ -1,0 +1,1 @@
+<view class="{{['wxParse _div',className]}}" style="{{('user-select:'+userSelect)}}"><block s-for="{{nodes}}" s-for-item="node" s-for-index="index" s-key="index"><block s-if="{{!loading}}"><block><weixin-parse-template vue-id="{{'90a346d4-1-'+index}}" node="{{node}}"></weixin-parse-template></block></block></block></view>

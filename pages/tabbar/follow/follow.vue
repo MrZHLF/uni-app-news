@@ -13,7 +13,7 @@
 						<list-scroll>
 							<uni-load-more v-if="list.length === 0 && !articleShow" status="loading" iconType="snow"></uni-load-more>
 							<list-card types="follow" v-for="item in list" :key="item._id" :item="item"></list-card>
-							<view class="no-data" v-if="articleShow">没有数据</view>
+							<view class="no-data" v-if="articleShow">没有收藏文章数据</view>
 						</list-scroll>
 					</view>
 				</swiper-item>
@@ -21,6 +21,7 @@
 					<view class="swiper-item">
 						<list-scroll>
 							<list-author v-for="item in authorList" :key="item.id" :item="item"></list-author>
+							<view class="no-data" v-if="followShow">没有关注作者数据</view>
 						</list-scroll>
 					</view>
 				</swiper-item>
@@ -36,7 +37,8 @@
 				activeIndex:0,
 				list:[],
 				authorList:[],
-				articleShow:false
+				articleShow:false,
+				followShow:false
 			}
 		},
 		onLoad() {
@@ -69,6 +71,7 @@
 					const {data} = res
 					this.authorList = data
 					console.log(res,'55')
+					this.followShow = this.authorList.length ===0 ? true : false
 				})
 			}
 		}
